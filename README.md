@@ -5,13 +5,13 @@
 Rusher Finder ( File & Open Directory finder )
 ###
 ```bash
-python r-finder.py -x [target/list-target] -l [list] -t [thread]
+python R-Finder.py -x [target/list-target] -l [list] -t [thread]
 ```
 ###
 ```bash
-python r-finder.py -x https://www.target.com/ -l list.txt -t 10
+python R-Finder.py -x https://www.target.com/ -l list.txt -t 10
 ```
 OR
 ```bash
-python r-finder.py -x list-target.txt -l list.txt -t 10
+python R-Finder.py -x list-target.txt -l list.txt -t 10
 ```
