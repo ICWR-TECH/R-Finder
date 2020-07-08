@@ -36,7 +36,7 @@ class finder:
         parser.add_argument("-t", "--thread", required=True, type=int)
         self.args = parser.parse_args()
         print("[*] Finding...\n")
-        ThreadPool(self.args.thread).map(self.check, open(self.args.wordlist).read().splitlines())
+        ThreadPool(self.args.thread).map(self.check, open(self.args.list).read().splitlines())
         print("[*] Result:\n")
 
         if self.result != '':
