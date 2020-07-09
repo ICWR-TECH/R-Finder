@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # R-Finder ( File & Open Directory finder ) - R&D ICWR
 
-import random, requests
+import ssl, random, socket
 from argparse import ArgumentParser
 from multiprocessing.pool import ThreadPool
 
@@ -16,9 +16,30 @@ class finder:
 
         try:
 
-            x = requests.get(url="{}/{}".format(self.args.target, path), headers={ "User-Agent": self.useragent() }, timeout=5)
-        
-            if x.status_code == 200:
+            head = "GET /{} HTTP/1.1\r\n".format(path)
+            head += "Host: {}\r\n".format(self.args.target.split("/")[2])
+            head += "User-Agent: {}\r\n".format(self.useragent)
+            head += "Connection: Keep-Alive\r\n"
+            head += "Accept: */*\r\n\r\n"
+
+            if self.args.target.split(":")[0] == "https":
+
+                get_ssl = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+                s = get_ssl.wrap_socket(socket.socket(socket.AF_INET, socket.SOCK_STREAM), server_hostname=self.args.target.split("/")[2])
+                port = 443
+
+            elif self.args.target.split(":")[0] == "http":
+
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                port = 80
+
+            s.settimeout(self.args.timeout)
+            s.connect((self.args.target.split("/")[2], port))
+            s.send(head.encode())
+            response = s.recv(50).decode()
+            s.close()
+
+            if "200" in response:
 
                 self.result += "[+] {}/{}\n".format(self.args.target, path)
 
@@ -34,6 +55,7 @@ class finder:
         parser.add_argument("-x", "--target", required=True)
         parser.add_argument("-l", "--list", required=True)
         parser.add_argument("-t", "--thread", required=True, type=int)
+        parser.add_argument("-d", "--timeout", required=True, type=int)
         self.args = parser.parse_args()
         print("[*] Finding...\n")
         ThreadPool(self.args.thread).map(self.check, open(self.args.list).read().splitlines())
