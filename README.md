@@ -5,9 +5,9 @@
 Rusher Finder ( File & Open Directory finder )
 ###
 ```bash
-python R-Finder.py -x [target] -l [list] -t [thread]
+python R-Finder.py -x [target] -l [list] -t [thread] -d [timeout]
 ```
 ###
 ```bash
-python R-Finder.py -x https://www.target.com/ -l list.txt -t 10
+python R-Finder.py -x https://www.target.com/ -l list.txt -t 10 -d 5
 ```
